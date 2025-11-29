@@ -1,0 +1,28 @@
+import grpc
+from sqlalchemy import select
+
+from ..db_hellper import db_helper
+from ..models.user import User
+from .iuser_repositories import IUserRepository
+
+class SQLAlchemyUserRepository(IUserRepository):
+
+    async def create_user(self, user: User,context) -> None:
+        try:
+            async with db_helper.transaction() as session:
+                session.add(user)
+        except Exception as e:
+            await context.abort(grpc.StatusCode.INTERNAL, str(e))
+
+    async def get_user_by_id_auth(self, id_auth: int,context) -> User | None:
+        async with db_helper.transaction() as session:
+            result = await session.execute(select(User).where(User.id_auth==id_auth))
+            return result.scalar_one_or_none()
+    
+    async def delete_user(self, user: User,context) -> None:
+        async with db_helper.transaction() as session:
+            await session.delete(user)
+
+    async def update_user(self, user: User,context) -> None:
+        async with db_helper.transaction() as session:
+            session.add(user)
