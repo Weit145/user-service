@@ -7,14 +7,14 @@ from .iuser_repositories import IUserRepository
 
 class SQLAlchemyUserRepository(IUserRepository):
 
-    async def create_user(self, user: User,context) -> None:
+    async def create_user(self, user: User) -> None:
         try:
             async with db_helper.transaction() as session:
                 session.add(user)
         except Exception as e:
-            await context.abort(grpc.StatusCode.INTERNAL, str(e))
+            raise
 
-    async def get_user_by_id_auth(self, id_auth: int,context) -> User | None:
+    async def get_user_by_id_auth(self, id_auth: int) -> User | None:
         async with db_helper.transaction() as session:
             result = await session.execute(select(User).where(User.id_auth==id_auth))
             return result.scalar_one_or_none()

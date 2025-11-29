@@ -1,6 +1,6 @@
 from proto import user_pb2_grpc
 
-from app.gateway.services.usrer_service import UserServiceImpl
+from app.gateway.services.user_service import UserServiceImpl
 
 class UserServicer(user_pb2_grpc.UserServicer):
     async def DeleteUser(self, request, context):

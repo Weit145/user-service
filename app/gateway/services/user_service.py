@@ -1,5 +1,5 @@
 from app.core.db.models.user import User
-from proto import user_pb2_grpc
+from proto import user_pb2_grpc, user_pb2
 
 from app.core.db.repositories.user_repositories import SQLAlchemyUserRepository
 from app.gateway.services.iuser_service import IUserServiceImpl
@@ -43,8 +43,10 @@ class UserServiceImpl(IUserServiceImpl):
         return converter_user_out_response(result)
     
     async def CreateUserFromAuth(self, data:dict) -> None:
-        id_auth = data.get("id_auth")
+        id_auth = data.get("id")
+        print(f"Creating user for auth ID: {id_auth}", flush=True)
         username = data.get("username")
+        print(f"Username from auth service: {username}", flush=True)
         user = await self.repo.get_user_by_id_auth(id_auth)
         if user is None:
             user_new = User(

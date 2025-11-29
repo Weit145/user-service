@@ -5,7 +5,7 @@ from aiokafka.admin import NewTopic
 
 from app.kafka.kf_helper import kf_helper
 
-from app.gateway.services.user_service import UserServiceImpl
+
 
 class KafkaRepository():
 
@@ -25,13 +25,14 @@ class KafkaRepository():
         async with kf_helper.transaction_consumer(topics=topic,group_id=group_id) as consumer:
             async for msg in consumer:
                 data = json.loads(msg.value.decode("utf-8"))
-                await UserServiceImpl.CreateUserFromAuth(data)
+                from app.gateway.services.user_service import UserServiceImpl
+                await UserServiceImpl().CreateUserFromAuth(data)
     
     async def wait_kafka(self, retries=10000, delay=20):
         for i in range(retries):
             try:
-                    await self.get_message(name_topic="auth", group_id="test_group")
-                    return
+                await self.create_topic(name_topic="test_connection")
+                return
             except Exception as e:
                 print(f"Kafka not ready yet ({i+1}/{retries}): {e}")
                 await asyncio.sleep(delay)
