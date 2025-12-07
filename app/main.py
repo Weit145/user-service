@@ -6,8 +6,9 @@ from app.gateway.gRPC.server import serve
 async def main():
     kf = KafkaRepository()
     await kf.wait_kafka()
-    await kf.get_message("registration","user_service")
+    asyncio.create_task(kf.get_message("registration", "user_service"))
     await serve()
+    
 
 if __name__ == "__main__":
     asyncio.run(main())

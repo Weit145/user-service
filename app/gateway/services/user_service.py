@@ -21,21 +21,29 @@ class UserServiceImpl(IUserServiceImpl):
 
 
     async def DeleteUser(self, request,context)->user_pb2.Empty:
-        user = await self.repo.get_user_by_id(request.id,context)
+        user = await self.repo.get_user_by_id_auth(request.id)
         await check_in_db(user,context)
 
-        await self.repo.delete_user(request.id,context)
+        await self.repo.delete_user(user,context)
+
+        await self.kf.send_message(
+            topic="delete",
+            message={
+                "id": request.id
+            }
+        )
+
         return user_pb2.Empty()
 
     async def GetUser(self, request,context)->user_pb2.UserOutResponse:
-        user = await self.repo.get_user_by_id(request.id,context)
+        user = await self.repo.get_user_by_id_auth(request.id)
         await check_in_db(user,context)
 
         return converter_user_out_response(user)
 
 
     async def UserUpdate(self, request,context)->user_pb2.UserOutResponse:
-        user = await self.repo.get_user_by_id(request.id,context)
+        user = await self.repo.get_user_by_id_auth(request.id)
         await check_in_db(user,context)
 
         result = convert_update_user(request,user)

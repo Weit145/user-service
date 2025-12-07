@@ -31,7 +31,7 @@ class KafkaRepository():
     async def wait_kafka(self, retries=10000, delay=20):
         for i in range(retries):
             try:
-                await self.create_topic(name_topic="test_connection")
+                await self.create_topic(name_topic="delete")
                 return
             except Exception as e:
                 print(f"Kafka not ready yet ({i+1}/{retries}): {e}")
