@@ -23,6 +23,13 @@ class SQLAlchemyUserRepository(IUserRepository):
         async with db_helper.transaction() as session:
             result = await session.execute(select(User).where(User.username==username))
             return result.scalar_one_or_none()
+        
+    async def get_users_by_ids_auth(self, ids_auth: list[int]) -> list[User]:
+        if not ids_auth:
+                return []
+        async with db_helper.transaction() as session:
+            result = await session.execute(select(User).where(User.id_auth.in_(ids_auth)))
+            return result.scalars().all()
     
     async def delete_user(self, user: User,context) -> None:
         async with db_helper.transaction() as session:
@@ -31,3 +38,5 @@ class SQLAlchemyUserRepository(IUserRepository):
     async def update_user(self, user: User,context) -> None:
         async with db_helper.transaction() as session:
             session.add(user)
+
+        

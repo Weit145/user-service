@@ -4,7 +4,7 @@ from app.core.db.repositories.user_repositories import SQLAlchemyUserRepository
 from app.core.db.models.user import User
 
 async def check_in_db(
-    db:User|None,
+    db:User|None|list[User]|None,
     context,
 )->None:
     

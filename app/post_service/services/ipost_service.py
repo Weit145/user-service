@@ -14,3 +14,7 @@ class IPostServiceImpl(ABC):
     @abstractmethod
     async def GetByID(self, request,context)->user_post_pb2.UserUsername:
         pass
+
+    @abstractmethod
+    async def GetByIDs(self, request,context)->user_post_pb2.UsersMapResponse:
+        pass
