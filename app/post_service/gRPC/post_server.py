@@ -8,6 +8,6 @@ class PostServicer(user_post_pb2_grpc.UserPostServicer):
 
     async def GetByID(self, request, context):
         return await PostServiceImpl().GetByID(request, context)
-    
+
     async def GetByIDs(self, request, context):
         return await PostServiceImpl().GetByIDs(request, context)

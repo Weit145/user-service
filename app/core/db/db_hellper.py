@@ -7,9 +7,9 @@ from sqlalchemy.ext.asyncio import (
 )
 from ..config import settings
 
-from time import sleep
 from alembic.config import Config
 from alembic import command
+
 
 class DatabaseHellper:
     def __init__(self, url: str, echo: bool = False):
@@ -21,14 +21,14 @@ class DatabaseHellper:
             autoflush=False,
             expire_on_commit=False,
         )
-        
+
     def get_scoped_session(self):
         # Создаем scoped сессию - одна сессия на одну асинхронную задачу
         session = async_scoped_session(
             session_factory=self.session_factory, scopefunc=asyncio.current_task
         )
         return session
-    
+
     @asynccontextmanager
     async def transaction(self):
         session_factory = self.get_scoped_session()
@@ -40,8 +40,8 @@ class DatabaseHellper:
             await session.rollback()
             raise
         finally:
-            await session.close()    
-    
+            await session.close()
+
     @staticmethod
     async def run_migrations():
         for i in range(50):
@@ -50,10 +50,11 @@ class DatabaseHellper:
                 await asyncio.to_thread(command.upgrade, alembic_cfg, "head")
                 return
             except Exception as e:
-                print(f"Database not ready yet ({i+1}/5): {e}",flush=True)
+                print(f"Database not ready yet ({i + 1}/5): {e}", flush=True)
                 await asyncio.sleep(20)
 
     # @property
     # @staticmethod
+
 
 db_helper = DatabaseHellper(url=settings.db_url, echo=settings.db_echo)

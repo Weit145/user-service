@@ -1,20 +1,20 @@
 from abc import ABC, abstractmethod
 from proto import user_post_pb2
 
-class IPostServiceImpl(ABC):
 
+class IPostServiceImpl(ABC):
     @abstractmethod
     def __init__(self):
         pass
 
     @abstractmethod
-    async def GetByUsername(self, request,context)->user_post_pb2.UserId:
+    async def GetByUsername(self, request, context) -> user_post_pb2.UserId:
         pass
 
     @abstractmethod
-    async def GetByID(self, request,context)->user_post_pb2.UserUsername:
+    async def GetByID(self, request, context) -> user_post_pb2.UserUsername:
         pass
 
     @abstractmethod
-    async def GetByIDs(self, request,context)->user_post_pb2.UsersMapResponse:
+    async def GetByIDs(self, request, context) -> user_post_pb2.UsersMapResponse:
         pass
