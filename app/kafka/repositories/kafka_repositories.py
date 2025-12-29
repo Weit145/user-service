@@ -31,8 +31,10 @@ class KafkaRepository:
             async for msg in consumer:
                 data = json.loads(msg.value.decode("utf-8"))
                 from app.gateway.services.user_service import UserServiceImpl
-
-                await UserServiceImpl().CreateUserFromAuth(data)
+                if topic == "registration":
+                    await UserServiceImpl().CreateUserFromAuth(data)
+                elif topic == "admin_delete_user":
+                    await UserServiceImpl().DeleteUserAdmin(data)
 
     async def wait_kafka(self, retries=10000, delay=20):
         for i in range(retries):
