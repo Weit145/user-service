@@ -52,3 +52,9 @@ class UserServiceImpl(IUserServiceImpl):
         if user is None:
             user_new = User(username=username, id_auth=id_auth)
             await self.repo.create_user(user_new)
+
+    async def DeleteUserAdmin(self, data: dict)->None:
+        id_auth = data.get("id")
+        user = await self.repo.get_user_by_id_auth(id_auth)
+        if user:
+            await self.repo.delete_user(user, context)
