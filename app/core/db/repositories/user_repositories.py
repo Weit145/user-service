@@ -34,7 +34,7 @@ class SQLAlchemyUserRepository(IUserRepository):
             )
             return result.scalars().all()
 
-    async def delete_user(self, user: User, context) -> None:
+    async def delete_user(self, user: User) -> None:
         async with db_helper.transaction() as session:
             await session.delete(user)
 

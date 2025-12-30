@@ -57,4 +57,4 @@ class UserServiceImpl(IUserServiceImpl):
         id_auth = data.get("id")
         user = await self.repo.get_user_by_id_auth(id_auth)
         if user:
-            await self.repo.delete_user(user, context)
+            await self.repo.delete_user(user)
