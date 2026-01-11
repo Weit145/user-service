@@ -5,7 +5,6 @@ from pydantic_settings import BaseSettings
 
 load_dotenv()
 
-
 class Setting(BaseSettings):
     db_url: str = os.getenv("DB_URL", "sqlite+aiosqlite:///:memory:")
     db_echo: bool = False

@@ -4,7 +4,6 @@ from ..db_hellper import db_helper
 from ..models.user import User
 from .iuser_repositories import IUserRepository
 
-
 class SQLAlchemyUserRepository(IUserRepository):
     async def create_user(self, user: User) -> None:
         try:
