@@ -9,11 +9,13 @@ from app.core.db.db_hellper import db_helper
 async def main():
     kf = KafkaRepository()
     await kf.wait_kafka()
+
     migrations_task = asyncio.create_task(db_helper.run_migrations())
     kafka_task = asyncio.create_task(kf.get_message("registration", "user_service"))
     kafka_task_admin_delete = asyncio.create_task(kf.get_message("admin_delete_user", "user_service"))
     gateway_task = asyncio.create_task(serve_gateway())
     post_task = asyncio.create_task(serve_post_service())
+    
     await asyncio.gather(migrations_task, kafka_task, gateway_task, post_task,kafka_task_admin_delete)
 
 
